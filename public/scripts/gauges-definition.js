@@ -48,11 +48,14 @@ function createTemperatureGauge() {
         animationRule: "linear",
         barWidth: 10,
     });
+
+    gauge.draw(); // Draw the gauge initially
+
     return gauge;
 }
 
 // Create Humidity Gauge
-function createHumidityGauge(){
+function createHumidityGauge() {
     var gauge = new RadialGauge({
         renderTo: 'gauge-humidity',
         width: 300,
@@ -96,21 +99,8 @@ function createHumidityGauge(){
         animationDuration: 1500,
         animationRule: "linear"
     });
+
+    gauge.draw(); // Draw the gauge initially
+
     return gauge;
-}
-
-
-// Animate Gauge
-function animateGauge(gauge, newValue, step) {
-    var currentValue = gauge.value;
-    var direction = newValue > currentValue ? 1 : -1;
-    var stepSize = Math.abs(currentValue - newValue) > step ? step : Math.abs(currentValue - newValue);
-    var interval = setInterval(function() {
-        if ((direction == 1 && gauge.value < newValue) || (direction == -1 && gauge.value > newValue)) {
-            gauge.value += direction * stepSize;
-        } else {
-            clearInterval(interval);
-            gauge.value = newValue; // Ensure final value is accurate
-        }
-    }, gauge.animationDuration / Math.abs(currentValue - newValue));
 }

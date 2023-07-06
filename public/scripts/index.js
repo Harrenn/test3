@@ -130,7 +130,7 @@ function epochToJsDate(epochTime){
           gaugesReadingsElement.style.display = 'none';
         }
       });
-      // Checbox (chart for sensor readings)
+      // Checbox (charta for sensor readings)
       chartsCheckboxElement.addEventListener('change', (e) =>{
         if (chartsCheckboxElement.checked) {
           chartsDivElement.style.display = 'block';
@@ -157,27 +157,21 @@ function epochToJsDate(epochTime){
   
       // GAUGES
       // Get the latest readings and display on gauges
-// Create gauges once
-var gaugeT = createTemperatureGauge();
-var gaugeH = createHumidityGauge();
-
-gaugeT.draw();
-gaugeH.draw();
-
-// Update gauges whenever new data arrives
-dbRef.orderByKey().limitToLast(1).on('child_added', snapshot => {
-  var jsonData = snapshot.toJSON();
-  var temperature = jsonData.temperature;
-  var humidity = jsonData.humidity;
-  var timestamp = jsonData.timestamp;
-
-  // Use the animateGauge function to update gauge values
-  animateGauge(gaugeT, temperature, 1);
-  animateGauge(gaugeH, humidity, 1);
-
-  updateElement.innerHTML = epochToDateTime(timestamp);
-});
-
+      dbRef.orderByKey().limitToLast(1).on('child_added', snapshot =>{
+        var jsonData = snapshot.toJSON(); // example: {temperature: 25.02, humidity: 50.20, pressure: 1008.48, timestamp:1641317355}
+        var temperature = jsonData.temperature;
+        var humidity = jsonData.humidity;
+        var pressure = jsonData.pressure;
+        var timestamp = jsonData.timestamp;
+        // Update DOM elements
+        var gaugeT = createTemperatureGauge();
+        var gaugeH = createHumidityGauge();
+        gaugeT.draw();
+        gaugeH.draw();
+        gaugeT.value = temperature;
+        gaugeH.value = humidity;
+        updateElement.innerHTML = epochToDateTime(timestamp);
+      });
   
       // DELETE DATA
       // Add event listener to open modal when click on "Delete Data" button
